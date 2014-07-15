@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<script src="http://mimic.sourceforge.jp/jsapi/mbedJS.all.js"></script>
+<script type="text/javascript">
+
+function Sleep(ms) {
+    var d1 = new Date().getTime();
+    var d2 = new Date().getTime();
+    while( d2 < (d1 + ms) ) {
+        d2 = new Date().getTime();
+    }
+    return;
+}
+// i2c temperture sensor 
+
+function start()
+{
+	var g=function*()
+	{
+	
+		try
+		{
+			var mcu=new mbedJS.Mcu("10.0.0.2",g);
+			yield mcu.waitForNew();
+				
+			var addr = 0x90;
+			var v;
+			//document.write("r is "+r+"<br>\n");
+			var i2c = new mbedJS.I2C(mcu,[mbedJS.PinName.p28 , mbedJS.PinName.p27],g);
+			yield i2c.waitForNew();
+			//yield i2c.frequency(100);
+			//yield i2c.start();
+			yield i2c.write(addr,[0x01 , 0x00],false);
+			Sleep(500);
+			yield i2c.write(addr,0x00,false);
+			yield v=i2c.read(addr,2,false);
+			//document.write(v.toString()+"<br>\n");
+			
+			//yield i2c.stop();
+			//yield mcu.close();
+		}catch(e){
+			//mcu.shutdown();
+			alert(e);
+			throw e;
+		}
+	}();
+	for (n=0;n<20;n++){
+		document.write(g.next()+"<br>\n");
+	}
+}
+
+
+  
+</script>
+</head>
+<h1 id="title">temperture LM75</h1>
+<body onload="start()">
+</body>
+</html>
