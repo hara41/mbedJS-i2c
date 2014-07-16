@@ -26,19 +26,17 @@ function start()
 				
 			var addr = 0x90;
 			var v;
-			//document.write("r is "+r+"<br>\n");
 			var i2c = new mbedJS.I2C(mcu,[mbedJS.PinName.p28 , mbedJS.PinName.p27],g);
 			yield i2c.waitForNew();
-			//yield i2c.frequency(100);
-			//yield i2c.start();
+			yield i2c.frequency(100);
+			yield i2c.start();
 			yield i2c.write(addr,[0x01 , 0x00],false);
 			Sleep(500);
 			yield i2c.write(addr,0x00,false);
 			yield v=i2c.read(addr,2,false);
-			//document.write(v.toString()+"<br>\n");
 			
-			//yield i2c.stop();
-			//yield mcu.close();
+			yield i2c.stop();
+			yield mcu.close();
 		}catch(e){
 			//mcu.shutdown();
 			alert(e);
