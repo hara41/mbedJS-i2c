@@ -24,17 +24,16 @@ function start()
 			var mcu=new mbedJS.Mcu("10.0.0.2",g);
 			yield mcu.waitForNew();
 				
-			var addr = 0x90;
 			var v;
 			var i2c = new mbedJS.I2C(mcu,[mbedJS.PinName.p28 , mbedJS.PinName.p27],g);
 			yield i2c.waitForNew();
-			yield i2c.frequency(100);
+			yield i2c.frequency(1000);
 			yield i2c.start();
-			yield i2c.write(addr,[0x01 , 0x00],false);
+			yield i2c.write(0x90,[0x01 , 0x00],false);
 			Sleep(500);
-			yield i2c.write(addr,0x00,false);
-			yield v=i2c.read(addr,2,false);
-			
+			yield i2c.write(0x90,0x00,false);
+			yield v=i2c.read(0x90,2,false);
+			document.write(v+"<br>\n");
 			yield i2c.stop();
 			yield mcu.close();
 		}catch(e){
